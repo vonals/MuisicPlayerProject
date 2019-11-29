@@ -26,11 +26,6 @@ public class Utils {
                 song.size = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE));
                 //把歌曲名字和歌手切割开
                 if (song.size > 1000 * 800) {
-                    if (song.song.contains("-")) {
-                        String[] str = song.song.split("-");
-                        song.singer = str[0];
-                        song.song = str[1];
-                    }
                     list.add(song);
                 }
             }

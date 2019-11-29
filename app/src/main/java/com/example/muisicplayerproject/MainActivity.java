@@ -20,6 +20,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.SeekBar;
 import android.widget.Toast;
 
 import java.io.File;
@@ -31,80 +32,77 @@ import static com.example.muisicplayerproject.Utils.list;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private MediaPlayer mediaPlayer=new MediaPlayer();
+    private int currentPosition;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Button pre=(Button)findViewById(R.id.bt_pre);
+        pre.setOnClickListener(this);
         Button play=(Button)findViewById(R.id.bt_play);
         play.setOnClickListener(this);
         Button pause=(Button)findViewById(R.id.bt_pause);
         pause.setOnClickListener(this);
-        Button stop=(Button)findViewById(R.id.bt_stop);
-        stop.setOnClickListener(this);
-        list = new ArrayList<>();
-        list = Utils.getmusic(this);//获取音乐列表
-        ListAdapter adapter=new ListAdapter(MainActivity.this,list);//设置List适配器
-        ListView listView=(ListView)findViewById(R.id.list_song);
-        listView.setAdapter(adapter);
+        Button next=(Button)findViewById(R.id.bt_next);
+        next.setOnClickListener(this);
+        SeekBar seekBar=(SeekBar)findViewById(R.id.seekBar);//还没写
+
 
         if(ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.READ_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(MainActivity.this,new String []{
                     Manifest.permission.READ_EXTERNAL_STORAGE
             },1);
         }else{
+
 //            initMediaPlayer();
         }
+        list = new ArrayList<>();
+        list = Utils.getmusic(this);//获取音乐列表
+        ListAdapter adapter=new ListAdapter(MainActivity.this,list);//设置List适配器
+        ListView listView=(ListView)findViewById(R.id.list_song);
+        listView.setAdapter(adapter);
 
         //List点击监听
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                currentPosition=position;
-//                musicPlay(currentPosition);//播放音乐
-//                ListAdapter.changeSelected(currentPosition);//设置字体变色
-//                play.setVisibility(View.INVISIBLE);//播放按钮消失
-//                pause.setVisibility(View.VISIBLE);//暂停按钮出现
-//                String song=list.get(currentPosition).song;//获取音乐名
-//                String singer=list.get(currentPosition).singer;//获取歌手名
-//                bottomSong.setText(song);//底栏显示音乐名
-//                bottomSinger.setText(singer);//底栏显示歌手名
-//                gang.setVisibility(View.VISIBLE);//横杠
-//
-//            }
-//        });
-
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                currentPosition=position;
+                musicPlay(currentPosition);
+            }
+        });
     }
     //播放音乐
-//    private void musicPlay(int currentPosition) {
-//        seekBar.setMax(list.get(currentPosition).getDuration());
-//        try {
-//            // 重置音频文件，防止多次点击会报错
-//            mediaPlayer.reset();
-//            //调用方法传进播放地址
-//            mediaPlayer.setDataSource(list.get(currentPosition).getPath());
-//            //异步准备资源，防止卡顿
-//            mediaPlayer.prepareAsync();
-//            //调用音频的监听方法，音频准备完毕后响应该方法进行音乐播放
-//            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-//                @Override
-//                public void onPrepared(MediaPlayer mediaPlayer) {
-//                    mediaPlayer.start();//开始播放
-//                    Thread thread = new Thread(new SeekBarThread());//更新SeekBar的线程
-//                    thread.start();
-//                }
-//            });
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
+    private void musicPlay(int currentPosition){
+        try{
+            mediaPlayer.reset();
+            mediaPlayer.setDataSource(list.get(currentPosition).getPath());
+            mediaPlayer.prepareAsync();
+            //准备好后启动
+            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                    mediaPlayer.start();
+                }
+            });
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
 
     @Override
     public void onClick(View v) {
         switch(v.getId()){
+            case R.id.bt_pre:
+                currentPosition--;
+                if (currentPosition > list.size() - 1) {
+                    currentPosition = 0;
+                }
+                musicPlay(currentPosition);
+                break;
             case R.id.bt_play:
                 if(!mediaPlayer.isPlaying()){
                     Log.d("kangon","onClick/Play");
-
                     mediaPlayer.start();
                 }
                 break;
@@ -113,18 +111,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     mediaPlayer.pause();
                 }
                 break;
-            case R.id.bt_stop:
-                if(mediaPlayer.isPlaying()){
-                    mediaPlayer.reset();
-                    initMediaPlayer();
+            case R.id.bt_next:
+                currentPosition++;
+                if (currentPosition > list.size() - 1) {
+                    currentPosition = 0;
                 }
+                musicPlay(currentPosition);
                 break;
             default:
                 break;
         }
     }
     private void initMediaPlayer(){
-        Log.d("kangon","真实/init");
         try{
 //            mediaPlayer = MediaPlayer.create(MainActivity.this, R.raw.music);
 //            File file=new File(Environment.getExternalStorageDirectory(),"music.mp3");
