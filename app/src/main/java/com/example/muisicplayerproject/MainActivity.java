@@ -31,8 +31,9 @@ import java.util.List;
 import static com.example.muisicplayerproject.Utils.list;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    private MediaPlayer mediaPlayer=new MediaPlayer();
-    private int currentPosition;
+    private MediaPlayer mediaPlayer=new MediaPlayer();//播放器
+    private int currentPosition;//当前List位置
+    private ListAdapter adapter=null;//设置List适配器
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,8 +59,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         list = new ArrayList<>();
         list = Utils.getmusic(this);//获取音乐列表
-        ListAdapter adapter=new ListAdapter(MainActivity.this,list);//设置List适配器
-        ListView listView=(ListView)findViewById(R.id.list_song);
+        adapter=new ListAdapter(MainActivity.this,list);//设置List适配器
+        final ListView listView=(ListView)findViewById(R.id.list_song);
         listView.setAdapter(adapter);
 
         //List点击监听
@@ -68,6 +69,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 currentPosition=position;
                 musicPlay(currentPosition);
+                adapter.changeSelected(currentPosition);
+            }
+        });
+        //完成后自动下一曲
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                currentPosition++;
+                if(currentPosition>list.size()-1){
+                    currentPosition=0;
+                }
+                musicPlay(currentPosition);
+                adapter.changeSelected(currentPosition);
             }
         });
     }
@@ -89,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-
+    //点击事件
     @Override
     public void onClick(View v) {
         switch(v.getId()){
@@ -99,6 +113,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     currentPosition = 0;
                 }
                 musicPlay(currentPosition);
+                adapter.changeSelected(currentPosition);
                 break;
             case R.id.bt_play:
                 if(!mediaPlayer.isPlaying()){
@@ -117,42 +132,45 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     currentPosition = 0;
                 }
                 musicPlay(currentPosition);
+                adapter.changeSelected(currentPosition);
                 break;
             default:
                 break;
         }
     }
-    private void initMediaPlayer(){
-        try{
-//            mediaPlayer = MediaPlayer.create(MainActivity.this, R.raw.music);
-//            File file=new File(Environment.getExternalStorageDirectory(),"music.mp3");
-//            Utils mu=new Utils();
-            List<Song> list=Utils.getmusic(MainActivity.this);
-            mediaPlayer.setDataSource(list.get(0).getPath());
-            mediaPlayer.prepareAsync();
-            if(mediaPlayer!=null){
-                Log.d("kangon","not nuull init play music");
-            }
-        }catch (IOException e){
-            Log.d("kangon","Exception/init");
-            e.printStackTrace();
-        }
-    }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch(requestCode){
-            case 1:
-                if(grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                    initMediaPlayer();
-                }else{
-                    finish();
-                }
-                break;
-            default:
+    //前朝余孽
+//    private void initMediaPlayer(){
+//        try{
+////            mediaPlayer = MediaPlayer.create(MainActivity.this, R.raw.music);
+////            File file=new File(Environment.getExternalStorageDirectory(),"music.mp3");
+////            Utils mu=new Utils();
+//            List<Song> list=Utils.getmusic(MainActivity.this);
+//            mediaPlayer.setDataSource(list.get(0).getPath());
+//            mediaPlayer.prepareAsync();
+//            if(mediaPlayer!=null){
+//                Log.d("kangon","not nuull init play music");
+//            }
+//        }catch (IOException e){
+//            Log.d("kangon","Exception/init");
+//            e.printStackTrace();
+//        }
+//    }
 
-        }
-    }
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        switch(requestCode){
+//            case 1:
+//                if(grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+//                    initMediaPlayer();
+//                }else{
+//                    finish();
+//                }
+//                break;
+//            default:
+//
+//        }
+//    }
 
     @Override
     protected void onDestroy() {//调用方法销毁mediaPlayer

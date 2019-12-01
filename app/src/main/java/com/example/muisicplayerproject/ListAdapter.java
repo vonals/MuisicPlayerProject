@@ -70,11 +70,11 @@ public class ListAdapter extends BaseAdapter {
             myholder.t_singer.setEnabled(true);
             myholder.t_blank.setVisibility(View.VISIBLE);
             //选中项背景
-            myholder.t_song.setTextColor(ContextCompat.getColor(context,R.color.aliceblue));
-            myholder.t_singer.setTextColor(ContextCompat.getColor(context,R.color.aliceblue));
-            myholder.t_albumn.setTextColor(ContextCompat.getColor(context,R.color.aliceblue));
-            myholder.t_point.setTextColor(ContextCompat.getColor(context,R.color.aliceblue));
-            myholder.t_duration.setTextColor(ContextCompat.getColor(context,R.color.aliceblue));
+            myholder.t_song.setTextColor(ContextCompat.getColor(context,R.color.yellow));
+            myholder.t_singer.setTextColor(ContextCompat.getColor(context,R.color.yellow));
+            myholder.t_albumn.setTextColor(ContextCompat.getColor(context,R.color.yellow));
+            myholder.t_point.setTextColor(ContextCompat.getColor(context,R.color.yellow));
+            myholder.t_duration.setTextColor(ContextCompat.getColor(context,R.color.yellow));
         } else {
             myholder.t_song.setEnabled(false);
             myholder.t_singer.setEnabled(false);

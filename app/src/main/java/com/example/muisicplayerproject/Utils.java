@@ -13,6 +13,7 @@ public class Utils {
     public static Song song;
     public static List<Song> getmusic(Context context) {
         list = new ArrayList<>();
+        //读MediaStore数据库
         Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                 null, null, null, MediaStore.Audio.AudioColumns.IS_MUSIC);
         if (cursor != null) {
@@ -24,7 +25,7 @@ public class Utils {
                 song.path = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA));
                 song.duration = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION));
                 song.size = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE));
-                //把歌曲名字和歌手切割开
+                //添加歌曲
                 if (song.size > 1000 * 800) {
                     list.add(song);
                 }
