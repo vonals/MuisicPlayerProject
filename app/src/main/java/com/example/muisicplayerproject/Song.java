@@ -12,4 +12,7 @@ public class Song {
     public String getPath(){
         return path;
     }
+    public int getDuration(){
+        return duration;
+    }
 }
