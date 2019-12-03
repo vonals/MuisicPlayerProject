@@ -23,6 +23,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -44,6 +45,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button circleTag;
     Button randomTag;
     SeekBar seekBar;
+    TextView end;
+    TextView now;
 
     //进度条线程状态更新
      class SeekBarThread implements Runnable{
@@ -70,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             switch (msg.what){
                 case UPDATE_SEEKBAR:
                     seekBar.setProgress(mediaPlayer.getCurrentPosition());
+                    now.setText(""+Utils.formatTime(mediaPlayer.getCurrentPosition()));
                     break;
                 default:
                     break;
@@ -93,7 +97,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         randomTag=(Button)findViewById(R.id.bt_random);
         randomTag.setOnClickListener(this);
         randomTag.setVisibility(View.INVISIBLE);
-        seekBar=(SeekBar)findViewById(R.id.seekBar);//还没写
+        seekBar=(SeekBar)findViewById(R.id.seekBar);
+        end=(TextView)findViewById(R.id.text_end);
+        now=(TextView)findViewById(R.id.text_now);
 
 
         if(ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.READ_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED){
@@ -107,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         final ListView listView=(ListView)findViewById(R.id.list_song);
         listView.setAdapter(adapter);
 
-        //List点击监听
+        //设置List点击监听
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -116,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 adapter.changeSelected(currentPosition);
             }
         });
-        //完成后自动下一曲
+        //设置mediaPlayer完成监听，完成后自动下一曲
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
@@ -136,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 adapter.changeSelected(currentPosition);
             }
         });
-        //进度条拖动事件响应
+        //设置进度条改变监听，进度条拖动事件响应
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -156,9 +162,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
     }
-    //播放音乐
+    //播放音乐函数
     private void musicPlay(int currentPosition){
         seekBar.setMax(list.get(currentPosition).getDuration());
+        end.setText(""+Utils.formatTime(list.get(currentPosition).getDuration()));
         try{
             mediaPlayer.reset();
             mediaPlayer.setDataSource(list.get(currentPosition).getPath());
@@ -183,7 +190,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    //点击事件
+    //点击下方按钮事件
     @Override
     public void onClick(View v) {
 
