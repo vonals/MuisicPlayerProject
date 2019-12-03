@@ -45,8 +45,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button circleTag;
     Button randomTag;
     SeekBar seekBar;
-    TextView end;
-    TextView now;
+    TextView end;//当前歌曲时间
+    TextView now;//当前进度时间
+    TextView songName;//歌曲信息
+    TextView singerName;//歌手信息
 
     //进度条线程状态更新
      class SeekBarThread implements Runnable{
@@ -84,24 +86,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Button pre=(Button)findViewById(R.id.bt_pre);
-        pre.setOnClickListener(this);
-        play=(Button)findViewById(R.id.bt_play);
-        pause=(Button)findViewById(R.id.bt_pause);
-        play.setOnClickListener(this);
-        pause.setOnClickListener(this);
-        Button next=(Button)findViewById(R.id.bt_next);
-        next.setOnClickListener(this);
-        circleTag=(Button)findViewById(R.id.bt_circle);
-        circleTag.setOnClickListener(this);
-        randomTag=(Button)findViewById(R.id.bt_random);
-        randomTag.setOnClickListener(this);
-        randomTag.setVisibility(View.INVISIBLE);
-        seekBar=(SeekBar)findViewById(R.id.seekBar);
-        end=(TextView)findViewById(R.id.text_end);
-        now=(TextView)findViewById(R.id.text_now);
-
-
         if(ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.READ_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(MainActivity.this,new String []{
                     Manifest.permission.READ_EXTERNAL_STORAGE
@@ -122,6 +106,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 adapter.changeSelected(currentPosition);
             }
         });
+        Button pre=(Button)findViewById(R.id.bt_pre);
+        pre.setOnClickListener(this);
+        play=(Button)findViewById(R.id.bt_play);
+        pause=(Button)findViewById(R.id.bt_pause);
+        play.setOnClickListener(this);
+        pause.setOnClickListener(this);
+        pause.setVisibility(View.INVISIBLE);
+        Button next=(Button)findViewById(R.id.bt_next);
+        next.setOnClickListener(this);
+        circleTag=(Button)findViewById(R.id.bt_circle);
+        circleTag.setOnClickListener(this);
+        randomTag=(Button)findViewById(R.id.bt_random);
+        randomTag.setOnClickListener(this);
+        randomTag.setVisibility(View.INVISIBLE);
+        seekBar=(SeekBar)findViewById(R.id.seekBar);
+        end=(TextView)findViewById(R.id.text_end);
+        now=(TextView)findViewById(R.id.text_now);
+        songName=(TextView)findViewById(R.id.text_songName);
+        singerName=(TextView)findViewById(R.id.text_singerName);
+
+
         //设置mediaPlayer完成监听，完成后自动下一曲
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
@@ -166,6 +171,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void musicPlay(int currentPosition){
         seekBar.setMax(list.get(currentPosition).getDuration());
         end.setText(""+Utils.formatTime(list.get(currentPosition).getDuration()));
+        songName.setText(list.get(currentPosition).getSong());
+        singerName.setText(list.get(currentPosition).getsinger());
         try{
             mediaPlayer.reset();
             mediaPlayer.setDataSource(list.get(currentPosition).getPath());
@@ -177,8 +184,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     mp.start();
                     SeekBarThread thread=new SeekBarThread();
                     new Thread(thread).start();
-//                    Thread thread=new Thread(new SeekBarThread());
-                    Toast.makeText(MainActivity.this,"启动线程？",Toast.LENGTH_SHORT);
 
 //                    thread.start();
                 }
@@ -209,6 +214,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     pause.setVisibility(View.VISIBLE);
                     Log.d("kangon","onClick/Play");
                     mediaPlayer.start();
+                    SeekBarThread thread=new SeekBarThread();
+                    new Thread(thread).start();
                 }
                 break;
             case R.id.bt_pause:

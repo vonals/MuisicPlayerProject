@@ -15,4 +15,10 @@ public class Song {
     public int getDuration(){
         return duration;
     }
+    public String getSong(){
+        return song;
+    }
+    public String getsinger(){
+        return singer;
+    }
 }

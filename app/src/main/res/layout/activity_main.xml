@@ -7,11 +7,22 @@
     <ListView
         android:id="@+id/list_song"
         android:layout_width="match_parent"
-        android:layout_height="570sp"/>
+        android:layout_height="535sp"/>
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/text_songName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="song"
+            />
+        <TextView
+            android:id="@+id/text_singerName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="singer"/>
         <SeekBar
             android:id="@+id/seekBar"
             android:layout_width="match_parent"
