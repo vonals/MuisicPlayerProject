@@ -11,7 +11,8 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@drawable/item_shape">
         <TextView
             android:id="@+id/text_songName"
             android:layout_width="match_parent"
@@ -26,7 +27,8 @@
         <SeekBar
             android:id="@+id/seekBar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            />
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
@@ -54,37 +56,42 @@
             android:layout_height="wrap_content">
             <Button
                 android:id="@+id/bt_pre"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Pre"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="75sp"
+                android:background="@drawable/ic_skip_previous"
                 />
             <Button
                 android:id="@+id/bt_play"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Play"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_row="0"
                 android:layout_column="1"
+                android:layout_marginLeft="15sp"
+                android:background="@drawable/ic_play_circle_outline"
                 />
             <Button
                 android:id="@+id/bt_pause"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Pause"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_row="0"
                 android:layout_column="1"
+                android:layout_marginLeft="15sp"
+                android:background="@drawable/ic_pause_circle_outline"
                 />
             <Button
                 android:id="@+id/bt_next"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Next"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="15sp"
+                android:background="@drawable/ic_skip_next"
                 />
             <Button
                 android:id="@+id/bt_circle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Circle"
+                android:layout_marginLeft="20sp"
                 android:layout_row="0"
                 android:layout_column="3"
                 />
@@ -93,6 +100,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Random"
+                android:layout_marginLeft="20sp"
                 android:layout_row="0"
                 android:layout_column="3"
                 />

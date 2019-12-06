@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextPaint;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     TextView now;//当前进度时间
     TextView songName;//歌曲信息
     TextView singerName;//歌手信息
+//    Button deleteSong;//还没写
 
     //进度条线程状态更新
      class SeekBarThread implements Runnable{
@@ -124,6 +126,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         end=(TextView)findViewById(R.id.text_end);
         now=(TextView)findViewById(R.id.text_now);
         songName=(TextView)findViewById(R.id.text_songName);
+        TextPaint paint =  songName.getPaint();
+        paint.setFakeBoldText(true);//歌名字体加粗
         singerName=(TextView)findViewById(R.id.text_singerName);
 
 
@@ -172,6 +176,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         seekBar.setMax(list.get(currentPosition).getDuration());
         end.setText(""+Utils.formatTime(list.get(currentPosition).getDuration()));
         songName.setText(list.get(currentPosition).getSong());
+        TextPaint paint =  songName.getPaint();
+        paint.setFakeBoldText(true);//歌名字体加粗
         singerName.setText(list.get(currentPosition).getsinger());
         try{
             mediaPlayer.reset();
